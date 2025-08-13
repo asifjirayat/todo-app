@@ -18,6 +18,14 @@ const App = () => {
     }
   };
 
+  const toggleTask = (id) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 font-sans text-gray-500">
       <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-xl">
@@ -45,11 +53,15 @@ const App = () => {
             tasks.map((task) => (
               <li
                 key={task.id}
-                className="flex items-center justify-between p-4 text-lg font-mono"
+                className={`flex items-center justify-between p-4 text-lg font-mono ${
+                  task.completed ? "bg-gray-200 line-through text-gray-500" : ""
+                }`}
               >
                 <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
+                    checked={task.completed}
+                    onChange={() => toggleTask(task.id)}
                     className="h-5 w-5 rounded-md text-emerald-600 focus:ring-emerald-500 cursor-pointer"
                   />
                   <span>{task.text}</span>
