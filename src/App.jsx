@@ -5,6 +5,7 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
   const [inputValue, setInputValue] = useState("");
 
+  // Function to add a new task
   const handleAddTask = () => {
     if (inputValue.trim()) {
       const newTask = {
@@ -12,12 +13,13 @@ const App = () => {
         text: inputValue,
         completed: false,
       };
-
+      // Update the tasks array and clear the input
       setTasks((prevTasks) => [...prevTasks, newTask]);
       setInputValue("");
     }
   };
 
+  // Function to toggle task (completed/not completed)
   const toggleTask = (id) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
@@ -26,13 +28,18 @@ const App = () => {
     );
   };
 
+  // Function to delete task
+  const deleteTask = (id) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 font-sans text-gray-500">
       <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-xl">
         <h1 className="text-3xl font-bold text-emerald-600 mb-6 text-center">
           My To-Do List
         </h1>
-
+        {/* Input to read task */}
         <div className="flex gap-2 mb-6">
           <input
             onChange={(e) => setInputValue(e.target.value)}
@@ -48,6 +55,8 @@ const App = () => {
             Add Task
           </button>
         </div>
+
+        {/* Render list of tasks */}
         <ul className="divide-y divide-gray-200">
           {tasks.length > 0 ? (
             tasks.map((task) => (
@@ -66,7 +75,10 @@ const App = () => {
                   />
                   <span>{task.text}</span>
                 </div>
-                <button className="text-gray-400 hover:text-red-500 transition-colors">
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  className="text-gray-400 hover:text-red-500 transition-colors"
+                >
                   <MdDelete className="h-5 w-5" />
                 </button>
               </li>
