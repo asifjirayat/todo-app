@@ -1,45 +1,19 @@
-import { useState } from "react";
 import { MdDelete } from "react-icons/md";
+import useTodos from "./hooks/useTodos.js";
+import Input from "./components/Input.jsx";
+import Button from "./components/Button.jsx";
 
 const App = () => {
-  const [tasks, setTasks] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-
-  // Function to add a new task
-  const handleAddTask = () => {
-    if (inputValue.trim()) {
-      const newTask = {
-        id: Date.now(),
-        text: inputValue,
-        completed: false,
-      };
-      // Update the tasks array and clear the input
-      setTasks((prevTasks) => [...prevTasks, newTask]);
-      setInputValue("");
-    }
-  };
-
-  // Function to toggle task (completed/not completed)
-  const toggleTask = (id) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
-  };
-
-  // Function to delete task
-  const deleteTask = (id) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-  };
-
-  // Function to delete all completed tasks
-  const deleteCompletedTasks = () => {
-    setTasks((prevTasks) => prevTasks.filter((task) => !task.completed));
-  };
-
-  // Function to check it app has completed tasks
-  const hasCompletedTasks = tasks.some((task) => task.completed);
+  const {
+    tasks,
+    inputValue,
+    setInputValue,
+    handleAddTask,
+    toggleTask,
+    deleteTask,
+    deleteCompletedTasks,
+    hasCompletedTasks,
+  } = useTodos();
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 font-sans text-gray-500">
@@ -49,19 +23,19 @@ const App = () => {
         </h1>
         {/* Input to read task */}
         <div className="flex gap-2 mb-6">
-          <input
+          <Input
             onChange={(e) => setInputValue(e.target.value)}
             value={inputValue}
             type="text"
             placeholder="Add a new task..."
             className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono"
           />
-          <button
+          <Button
             onClick={handleAddTask}
             className="bg-emerald-600 text-white p-2 rounded-md font-bold hover:bg-emerald-700 transition-colors"
           >
             Add Task
-          </button>
+          </Button>
         </div>
 
         {/* Render list of tasks */}
@@ -75,20 +49,22 @@ const App = () => {
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  <input
+                  <Input
                     type="checkbox"
                     checked={task.completed}
                     onChange={() => toggleTask(task.id)}
                     className="h-5 w-5 rounded-md text-emerald-600 focus:ring-emerald-500 cursor-pointer"
                   />
-                  <span>{task.text}</span>
+                  <span>
+                    {task.text.charAt(0).toUpperCase() + task.text.slice(1)}
+                  </span>
                 </div>
-                <button
+                <Button
                   onClick={() => deleteTask(task.id)}
                   className="text-gray-400 hover:text-red-500 transition-colors"
                 >
                   <MdDelete className="h-5 w-5" />
-                </button>
+                </Button>
               </li>
             ))
           ) : (
@@ -97,14 +73,16 @@ const App = () => {
             </p>
           )}
         </ul>
+
+        {/* Delete all completed tasks */}
         {hasCompletedTasks && (
           <div className="flex flex-col items-center justify-center">
-            <button
+            <Button
               onClick={deleteCompletedTasks}
               className="bg-red-600 text-white px-4 py-2 mt-4 rounded-md font-bold shadow hover:bg-red-700 transition-colors"
             >
               Delete Completed Tasks
-            </button>
+            </Button>
           </div>
         )}
       </div>
