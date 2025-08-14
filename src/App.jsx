@@ -33,6 +33,14 @@ const App = () => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
+  // Function to delete all completed tasks
+  const deleteCompletedTasks = () => {
+    setTasks((prevTasks) => prevTasks.filter((task) => !task.completed));
+  };
+
+  // Function to check it app has completed tasks
+  const hasCompletedTasks = tasks.some((task) => task.completed);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 font-sans text-gray-500">
       <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-xl">
@@ -89,6 +97,16 @@ const App = () => {
             </p>
           )}
         </ul>
+        {hasCompletedTasks && (
+          <div className="flex flex-col items-center justify-center">
+            <button
+              onClick={deleteCompletedTasks}
+              className="bg-red-600 text-white px-4 py-2 mt-4 rounded-md font-bold shadow hover:bg-red-700 transition-colors"
+            >
+              Delete Completed Tasks
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
